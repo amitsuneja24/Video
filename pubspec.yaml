@@ -23,9 +23,10 @@ environment:
 dependencies:
   image_picker: ^0.6.7+3
   video_player: ^0.10.11+2
-  firebase_storage: ^3.1.6
-  firebase_core: ^0.4.5
   fluttertoast: ^4.0.1
+  http: ^0.12.1
+  http_parser: ^3.1.4
+
   flutter:
     sdk: flutter
 

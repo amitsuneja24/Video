@@ -1,10 +1,10 @@
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:media/Network/network.dart';
 import 'package:media/Widgets/customButton.dart';
-import 'package:path/path.dart' as path;
 import 'package:video_player/video_player.dart';
 
 class homeScreen extends StatefulWidget {
@@ -17,8 +17,10 @@ class _homeScreenState extends State<homeScreen> {
   final picker = ImagePicker();
   VideoPlayerController _controller;
   bool _loading = false;
+  String apiData;
 
   //bool isSuccessful=false;
+
   @override
   void dispose() {
     if (_controller != null) {
@@ -42,6 +44,7 @@ class _homeScreenState extends State<homeScreen> {
     return ListView(
       //padding: EdgeInsets.symmetric(horizontal: 10),
       children: <Widget>[
+//       Container(child: Text(apiData),margin: EdgeInsets.all(20),),
         if (_videoFile == null)
           customButton(
               title: 'Choose Video',
@@ -140,20 +143,15 @@ class _homeScreenState extends State<homeScreen> {
   }
 
   void onUploadVideo() {
-    uploadVideo();
+    uploadVideoMongo();
   }
 
-  Future uploadVideo() async {
-    print(path.basename(_videoFile.path));
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        .child('videos/${path.basename(_videoFile.path)}');
-    StorageUploadTask storageUploadTask = storageReference.putFile(_videoFile);
+  Future uploadVideoMongo() async {
     try {
       setState(() {
         _loading = true;
       });
-      await storageUploadTask.onComplete;
+      await Api(_videoFile);
       onCancel();
       Fluttertoast.showToast(
           msg: 'Video Uploaded Successfully', toastLength: Toast.LENGTH_LONG);
@@ -162,5 +160,10 @@ class _homeScreenState extends State<homeScreen> {
       Fluttertoast.showToast(
           msg: 'Video Upload Failed', toastLength: Toast.LENGTH_LONG);
     }
+  }
+
+  Future Api(File file) async {
+    var data = await apiService().postVideo(file);
+    apiData = data;
   }
 }
