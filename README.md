@@ -2,6 +2,10 @@
 
 A new Flutter project.
 
+App Demo
+
+![App Demo](app.gif)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
